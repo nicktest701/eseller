@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "./static/css/main.835d18a1.css",
+    "main.js": "./static/js/main.24e400ca.js",
+    "static/js/787.ba16b1d1.chunk.js": "./static/js/787.ba16b1d1.chunk.js",
+    "static/media/student3.jpg": "./static/media/student3.036b9f610d8536e0c627.jpg",
+    "static/media/student5.jpg": "./static/media/student5.8d5c60f200734b0b28c9.jpg",
+    "static/media/student1.jpg": "./static/media/student1.ff09a6bbda16295f615e.jpg",
+    "static/media/student4.jpg": "./static/media/student4.5c3e296eafb41b6748ab.jpg",
+    "static/media/stadia_ticket.jpg": "./static/media/stadia_ticket.60bf9165d177ea7ac576.jpg",
+    "static/media/security_service.webp": "./static/media/security_service.8401fbc882652624d0da.webp",
+    "static/media/coat_of_arms.png": "./static/media/coat_of_arms.e3106fdb8bcedb87d3fa.png",
+    "static/media/background_ecg3.png": "./static/media/background_ecg3.a750027019b3f26e7421.png",
+    "static/media/mtn4.png": "./static/media/mtn4.72d361606945dc8777ae.png",
+    "static/media/airtime3.jpg": "./static/media/airtime3.f7078beac6665b9d2fa6.jpg",
+    "static/media/waec.jpg": "./static/media/waec.f43af000b917c238b058.jpg",
+    "static/media/ecg.jpg": "./static/media/ecg.a44f254bd63a2c3a782f.jpg",
+    "static/media/ges.jpg": "./static/media/ges.86071b14f1f0ab4117ca.jpg",
+    "static/media/university2.jpg": "./static/media/university2.a61a85d163d8890d40e9.jpg",
+    "index.html": "./index.html",
+    "main.835d18a1.css.map": "./static/css/main.835d18a1.css.map",
+    "main.24e400ca.js.map": "./static/js/main.24e400ca.js.map",
+    "787.ba16b1d1.chunk.js.map": "./static/js/787.ba16b1d1.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.835d18a1.css",
+    "static/js/main.24e400ca.js"
+  ]
+}
