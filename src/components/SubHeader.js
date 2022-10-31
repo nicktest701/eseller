@@ -1,7 +1,8 @@
 import React from "react";
 import { ArrowBackRounded } from "@mui/icons-material";
 import { Box, Divider, IconButton, Typography } from "@mui/material";
-function SubHeader({ title }) {
+import { Link } from "react-router-dom";
+function SubHeader({ title, to }) {
   return (
     <Box paddingY={2}>
       <Box
@@ -11,9 +12,11 @@ function SubHeader({ title }) {
         margin="auto"
         maxWidth="1000px"
       >
-        <IconButton sx={{ marginRight: 2 }}>
-          <ArrowBackRounded />
-        </IconButton>
+        <Link to={to}>
+          <IconButton sx={{ marginRight: 2 }}>
+            <ArrowBackRounded />
+          </IconButton>
+        </Link>
         <Typography variant="h5">{title}</Typography>
       </Box>
       <Divider flexItem />

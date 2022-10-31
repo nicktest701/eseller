@@ -24,7 +24,7 @@ function App() {
 
     typography: {
       fontFamily: `"Poppins", "Arial", "Roboto", "Helvetica", sans-serif`,
-      fontSize: 14,
+      fontSize: 13,
       fontWeightLight: 400,
       fontWeightRegular: 500,
       fontWeightMedium: 500,
@@ -33,7 +33,6 @@ function App() {
         textTransform: "capitalize",
         color: "#333",
       },
-   
     },
     components: {
       MuiTextField: {
@@ -41,7 +40,7 @@ function App() {
           size: "small",
           fullWidth: true,
           sx: {
-            fontSize: "14px",
+            fontSize: "13px",
             color: "#5F6368",
           },
         },
@@ -50,9 +49,12 @@ function App() {
         defaultProps: {
           // fullWidth:true,
           disableElevation: true,
+
           size: "large",
           sx: {
             paddingX: 2,
+            borderRadius: "8px",
+            paddingY: "10px",
           },
         },
       },

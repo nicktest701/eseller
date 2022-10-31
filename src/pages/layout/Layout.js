@@ -1,3 +1,4 @@
+
 import React from "react";
 import BottomNav from "./BottomNav";
 import Footer from "./Footer";
@@ -7,9 +8,8 @@ function Layout() {
   return (
     <>
       <Header />
-
+     
       <Main />
-
       <BottomNav />
       <Footer />
     </>

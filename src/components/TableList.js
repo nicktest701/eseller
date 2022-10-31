@@ -3,11 +3,11 @@ import React from "react";
 import BECETableBody from "./tables/bece/BECETableBody";
 import TableHeader from "./tables/bece/TableHeader";
 
-function TableList({ data }) {
+function TableList() {
   return (
     <Box>
       <TableHeader />
-      <BECETableBody data={data} />
+      <BECETableBody  />
     </Box>
   );
 }

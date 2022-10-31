@@ -17,10 +17,28 @@ import logo from "../../assets/images/waec.jpg";
 import WaecCheckerPayment from "../../components/modals/WaecCheckerPayment";
 import { Link } from "react-router-dom";
 import mtn from "../../assets/images/mtn.png";
-import { COLORS } from "../../constants";
+import { currencyFormatter, getCode, IMAGES, COLORS } from "../../constants";
+import { CustomContext } from "../../context/providers/CustomProvider";
+import { useQuery } from "react-query";
+import { getAllCategoriesByName } from "../../api/categoryAPI";
 
 function UniversityForms() {
   const [openWaec, setOpenWaec] = useState(false);
+
+  const categoryType = useQuery(
+    ["category"],
+    () => getAllCategoriesByName("university"),
+    {
+      select: (categories) => {
+        return categories.map(({ dataType, price }) => {
+          return {
+            dataType,
+            price,
+          };
+        });
+      },
+    }
+  );
 
   return (
     <>
@@ -41,16 +59,14 @@ function UniversityForms() {
             backgroundColor: "whitesmoke",
           }}
         >
-          <Breadcrumbs sx={{paddingBottom:2}}>
+          <Breadcrumbs sx={{ paddingBottom: 2 }}>
             <Typography variant="body2">
               <Link to="/"> Home</Link>
             </Typography>
             <Typography variant="body2">
               <Link to="/evoucher">E-Voucher</Link>
             </Typography>
-            <Typography variant="body2" >
-           University Forms
-            </Typography>
+            <Typography variant="body2">University Forms</Typography>
           </Breadcrumbs>
 
           <Stack spacing={2} direction="row" alignItems="center">
@@ -122,31 +138,19 @@ function UniversityForms() {
                     },
                   }}
                 >
-                  <MenuItem>BECE</MenuItem>
-                  <MenuItem>WASSCE (School),WASSCE (Private)</MenuItem>
-                  <MenuItem> NOV-DEC</MenuItem>
-                  <MenuItem>SSCE,ABCE,GBCE</MenuItem>
+                  {categoryType.data &&
+                    categoryType.data.map((item) => {
+                      return (
+                        <MenuItem key={item.dataType} value={item.dataType}>
+                          {item.dataType}
+                          {"---"}
+                          {currencyFormatter(item.price)}
+                        </MenuItem>
+                      );
+                    })}
                 </TextField>
-                <TextField
-                  size="small"
-                  select
-                  variant="outlined"
-                  placeholder="Select Form-Type"
-                  label="Select Form-Type"
-                  required
-                  fullWidth
-                  InputLabelProps={{
-                    style: {
-                      color: COLORS.secondary,
-                    },
-                  }}
-                  helperText="Price-GHS220.00"
-                >
-                  <MenuItem>BECE</MenuItem>
-                  <MenuItem>WASSCE (School),WASSCE (Private)</MenuItem>
-                  <MenuItem> NOV-DEC</MenuItem>
-                  <MenuItem>SSCE,ABCE,GBCE</MenuItem>
-                </TextField>
+                <small>Price- {currencyFormatter(1)}</small>
+
                 <TextField
                   size="small"
                   type="number"

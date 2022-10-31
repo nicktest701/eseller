@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Drawer from "@mui/material/Drawer";
 
 import { Box, Divider, IconButton, List, ListSubheader } from "@mui/material";
@@ -7,14 +7,26 @@ import { Close } from "@mui/icons-material";
 import GasMeterIcon from "@mui/icons-material/GasMeter";
 import NavLinkItem from "../../components/NavLinkItem";
 import NavLinkItemCollapse from "../../components/modals/NavLinkItemCollapse";
+import { CustomContext } from "../../context/providers/CustomProvider";
 
-function Sidebar({ openSidebar, setOpenSidebar }) {
+
+
+function Sidebar() {
+  const { customState, customDispatch } = useContext(CustomContext);
+
+
   return (
     <div>
       <Drawer
+        // variant="permanent"
         anchor="left"
-        open={openSidebar}
-        onClose={() => setOpenSidebar(false)}
+        open={customState.openSidebar}
+        onClose={() =>
+          customDispatch({
+            type: "openSidebar",
+            payload: false,
+          })
+        }
       >
         <Box role="presentation" width="300px">
           <Box
@@ -39,6 +51,12 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
             }
           >
             <NavLinkItem to="/" title="Dashboard" icon={<GasMeterIcon />} />
+            <Divider />
+            <NavLinkItem
+              to="evoucher"
+              title="E-Voucher"
+              icon={<GasMeterIcon />}
+            />
             <Divider />
             <NavLinkItemCollapse />
             <Divider />

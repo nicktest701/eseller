@@ -1,0 +1,105 @@
+{
+  "bece": [
+    [
+      {
+        "serial": 876876,
+        "pin": "8SD7A6S87"
+      },
+      {
+        "serial": 876876,
+        "pin": "8SD7A6S88"
+      },
+      {
+        "serial": 876876,
+        "pin": "8SD7A6S89"
+      },
+      {
+        "serial": 876876,
+        "pin": "8SD7A6S90"
+      },
+      {
+        "serial": 876876,
+        "pin": "8SD7A6S91"
+      },
+      {
+        "serial": 876876,
+        "pin": "8SD7A6S92"
+      },
+      {
+        "serial": 876876,
+        "pin": "8SD7A6S93"
+      },
+      {
+        "serial": 876876,
+        "pin": "8SD7A6S94"
+      }
+    ]
+  ],
+  "wassce-school": [
+    {
+      "id": 1,
+      "serialNo": "ASD78SD8S76A87",
+      "pinCode": 1983592387928723,
+      "valid": true
+    }
+  ],
+  "wassce-private": [
+    {
+      "id": 1,
+      "serialNo": "ASD78SD8S76A87",
+      "pinCode": 1983592387928723,
+      "valid": true
+    }
+  ],
+  "nov-dec": [
+    {
+      "id": 1,
+      "serialNo": "ASD78SD8S76A87",
+      "pinCode": 1983592387928723,
+      "valid": true
+    }
+  ],
+  "placement": [
+    {
+      "id": 1,
+      "serialNo": "ASD78SD8S76A87",
+      "pinCode": 1983592387928723,
+      "valid": true
+    }
+  ],
+  "university": [
+    {
+      "id": 1,
+      "serialNo": "ASD78SD8S76A87",
+      "pinCode": 1983592387928723,
+      "valid": true
+    }
+  ],
+  "scurity": [
+    {
+      "id": 1,
+      "serialNo": "ASD78SD8S76A87",
+      "pinCode": 1983592387928723,
+      "valid": true
+    }
+  ],
+  "stadium": [
+    {
+      "id": 1,
+      "serialNo": "ASD78SD8S76A87",
+      "pinCode": 1983592387928723,
+      "valid": true
+    }
+  ],
+  "cinema": [
+    {
+      "id": 1,
+      "serialNo": "ASD78SD8S76A87",
+      "pinCode": 1983592387928723,
+      "valid": true
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}

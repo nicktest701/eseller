@@ -32,46 +32,41 @@ function NavLinkItemCollapse({ to, title, icon }) {
           <AirplaneTicket />
         </ListItemIcon>
 
-        <NavLink to="evoucher" style={linkStyle}>
-          E-Vouchers
+        <NavLink to="add" style={linkStyle}>
+          Load Checker & E-Vouchers
         </NavLink>
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding sx={{ paddingLeft: 4 }}>
           <NavLinkItem
-            to="/evoucher/add-bece-checker"
-            title="BECE Checker"
-            icon={<GasMeter />}
-          />
-          <NavLinkItem
-            to="/evoucher/add-waec-checker"
+            to="/add/add-waec-checker"
             title="WAEC Checker"
+            type="waec"
             icon={<GasMeter />}
           />
           <NavLinkItem
-            to="/evoucher/add-school-placement"
-            title="School Placement"
-            icon={<GasMeter />}
-          />
-          <NavLinkItem
-            to="/evoucher/add-university-forms"
+            to="/add/add-university-forms"
             title="University Forms"
+            type="university"
             icon={<GasMeter />}
           />
           <NavLinkItem
-            to="/evoucher/add-security-service"
+            to="/add/add-security-service"
             title="Security Service"
+            type="security"
             icon={<GasMeter />}
           />
           <NavLinkItem
-            to="/evoucher/add-cinema-tickets"
+            to="/add/add-cinema-tickets"
             title="Cinema Tickets"
+            type="cinema"
             icon={<GasMeter />}
           />
           <NavLinkItem
-            to="/evoucher/add-stadia-tickets"
+            to="/add/add-stadia-tickets"
             title="Stadium Tickets"
+            type="stadium"
             icon={<GasMeter />}
           />
         </List>

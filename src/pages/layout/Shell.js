@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "../Dashboard";
 import Login from "../Login";
@@ -17,35 +17,17 @@ import UniversityForms from "../evoucher/UniversityForms";
 import CinemaTickets from "../evoucher/CinemaTickets";
 import StadiaTickets from "../evoucher/StadiaTickets";
 import AddWAECChecker from "../evoucher/add/AddWAECChecker";
-import AddSchoolPlacement from "../evoucher/add/AddSchoolPlacement";
-import AddSecurityService from "../evoucher/add/AddSecurityService";
-import AddUniversityForms from "../evoucher/add/AddUniversityForms";
-import AddCinemaTickets from "../evoucher/add/AddCinemaTickets";
-import AddStadiaTickets from "../evoucher/add/AddStadiaTickets";
 import Shop from "../evoucher/Shop";
 import Checkout from "../Checkout";
 import Payment from "../Payment";
 import NotFound from "../NotFound";
-import { getPayment } from "../../api/momoApi";
-import { useQuery } from "react-query";
 import ErrorPage from "../ErrorPage";
-import { useNavigate } from "react-router-dom";
+import Checker from "../evoucher/checker";
+import CheckerDashboard from "../evoucher/checker/CheckerDashboard";
+import { PAGES } from "../../constants";
+import AddChecker from "../evoucher/add";
 
 function Shell() {
-  const navigate = useNavigate();
-
-  // useQuery(["keys"], getPayment, {
-  //   retry: 1,
-  //   onSuccess: (data) => {
-  //     console.log(data);
-  //   },
-  //   onError: (error) => {
-  //     navigate("/error", {
-  //       replace: true,
-  //     });
-  //   },
-  // });
-
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -63,13 +45,23 @@ function Shell() {
           <Route path="cinema-ticket" element={<CinemaTickets />} />
           <Route path="stadia-ticket" element={<StadiaTickets />} />
 
-          <Route path="add-bece-checker" element={<AddBECEChecker />} />
-          <Route path="add-waec-checker" element={<AddWAECChecker />} />
-          <Route path="add-school-placement" element={<AddSchoolPlacement />} />
-          <Route path="add-security-service" element={<AddSecurityService />} />
-          <Route path="add-university-forms" element={<AddUniversityForms />} />
-          <Route path="add-cinema-tickets" element={<AddCinemaTickets />} />
-          <Route path="add-stadia-tickets" element={<AddStadiaTickets />} />
+          <Route path="checker" element={<Checker />}>
+            <Route index element={<CheckerDashboard />} />
+            <Route path="load-checker" element={<AddBECEChecker />} />
+          </Route>
+        </Route>
+
+        <Route path="/add" element={<AddChecker />}>
+          <Route index element={<CheckerDashboard />} />
+          {PAGES.map((item, index) => {
+            return (
+              <Route
+                key={index}
+                path={item.route}
+                element={<AddWAECChecker {...item} />}
+              />
+            );
+          })}
         </Route>
       </Route>
       <Route path="/user" element={<User />}>

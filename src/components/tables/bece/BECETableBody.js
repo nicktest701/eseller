@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import BECETableBodyItem from "./BECETableBodyItem";
 import { ReactComponent as NOData } from "../../../assets/images/colored/no-data.svg";
+import { CustomContext } from "../../../context/providers/CustomProvider";
 
-function BECETableBody({ data }) {
+function BECETableBody() {
+  const { customState } = useContext(CustomContext);
   return (
+    
     <Box
       sx={{
         width: "inherit",
@@ -14,13 +17,14 @@ function BECETableBody({ data }) {
         overflowY: "scroll",
       }}
     >
-      {data === undefined || data.length === 0 ? (
+      {customState.newCheckers === undefined ||
+      customState.newCheckers.length === 0 ? (
         <Stack alignItems="center" justifyContent="center" height="inherit">
           <NOData style={{ width: "80px" }} />
           <Typography variant="body2">No Data Available</Typography>
         </Stack>
       ) : (
-        data?.map((excelData, index) => {
+        customState.newCheckers.map((excelData, index) => {
           return <BECETableBodyItem key={index} data={excelData} />;
         })
       )}

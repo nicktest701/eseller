@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   AppBar,
   IconButton,
@@ -17,8 +17,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { NavLink, useNavigate } from "react-router-dom";
 import { IMAGES } from "../../constants";
 import Sidebar from "./Sidebar";
+import { CustomContext } from "../../context/providers/CustomProvider";
 
 function Header() {
+  const { customState, customDispatch } = useContext(CustomContext);
+
   const [openSidebar, setOpenSidebar] = useState(false);
   const [shadow, setShadow] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -152,17 +155,15 @@ function Header() {
           <IconButton
             color="inherit"
             sx={{ display: { xs: "block", md: "none" } }}
-            onClick={() => setOpenSidebar(true)}
+            onClick={() =>
+              customDispatch({ type: "openSidebar", payload: true })
+            }
           >
             <MenuIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Sidebar
-        openSidebar={openSidebar}
-        setOpenSidebar={setOpenSidebar}
-        linkStyle={myLinkStyles}
-      />
+      <Sidebar />
     </header>
   );
 }

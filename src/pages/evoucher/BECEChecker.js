@@ -17,13 +17,16 @@ import { object, string, number } from "yup";
 import { Formik } from "formik";
 //components
 import WaecCheckerPayment from "../../components/modals/WaecCheckerPayment";
-import { getCode, IMAGES } from "../../constants";
+import { currencyFormatter, getCode, IMAGES } from "../../constants";
 import { CustomContext } from "../../context/providers/CustomProvider";
+import { useQuery } from "react-query";
+import { getAllCategoriesByName } from "../../api/categoryAPI";
 
 function BECEChecker() {
   const { customDispatch } = useContext(CustomContext);
 
   const { palette } = useTheme();
+  const [checkerType, setCheckerType] = useState([]);
   const [openWaec, setOpenWaec] = useState(false);
   const [examsType, setExamsType] = useState("");
   const [price, setPrice] = useState(0);
@@ -34,6 +37,24 @@ function BECEChecker() {
   const [serviceProvider, setServiceProvider] = useState("");
   const [serviceProviderImage, setServiceProviderImage] = useState(null);
 
+  const categoryType = useQuery(
+    ["category"],
+    () => getAllCategoriesByName("waec"),
+    {
+      select: (categories) => {
+        return categories.map(({ dataType, price }) => {
+          return {
+            dataType,
+            price,
+          };
+        });
+      },
+      onSuccess: (data) => {
+        setCheckerType(data);
+      },
+    }
+  );
+
   const handleExamsTypeChange = (e) => {
     setExamsType(e.target.value);
     setTotalAmount("");
@@ -41,30 +62,14 @@ function BECEChecker() {
     setQuantity("");
   };
 
-  useMemo(() => {
+  const checkerPrice = useMemo(() => {
     let voucherPrice;
-    switch (examsType) {
-      case "BECE":
-        voucherPrice = 12;
-        break;
-      case "WASSCE(School)":
-        voucherPrice = 20;
-        break;
-      case "WASSCE(Private)":
-        voucherPrice = 20;
-        break;
-      case "NOV-DEC":
-        voucherPrice = 30;
-        break;
-      case "SSCE":
-        voucherPrice = 40;
-        break;
-      default:
-        voucherPrice = 1;
+    if (checkerType !== undefined) {
+      const item = checkerType.find((item) => item.dataType === examsType);
+      setPrice(item === undefined ? 0 : item.price);
     }
-    setPrice(voucherPrice);
     return voucherPrice;
-  }, [examsType]);
+  }, [examsType, checkerType]);
 
   const getServiceProviderImage = useMemo(() => {
     switch (serviceProvider) {
@@ -222,26 +227,23 @@ function BECEChecker() {
                     required
                     fullWidth
                     error={Boolean(touched.examsType && errors.examsType)}
-                    helperText={
-                      touched.examsType && errors.examsType && errors.examsType
-                    }
+                    helperText={touched.examsType && errors.examsType}
                     value={examsType}
                     onChange={handleExamsTypeChange}
                   >
-                    <MenuItem value="BECE">BECE</MenuItem>
-                    <MenuItem value="WASSCE(School)">WASSCE (School)</MenuItem>
-                    <MenuItem value="WASSCE(Private)">
-                      WASSCE (Private)
-                    </MenuItem>
-                    <MenuItem value="NOV-DEC"> NOV-DEC</MenuItem>
-                    <MenuItem value="SSCE">SSCE,ABCE,GBCE</MenuItem>
+                    {categoryType.data &&
+                      categoryType.data.map((item) => {
+                        return (
+                          <MenuItem key={item.dataType} value={item.dataType}>
+                            {item.dataType}
+                            {"---"}
+                            {currencyFormatter(item.price)}
+                          </MenuItem>
+                        );
+                      })}
                   </TextField>
                   <>
-                    {examsType.trim().length !== 0 ? (
-                      <small style={{ color: palette.info.main }}>
-                        Price -GHS {price.toFixed(2)}
-                      </small>
-                    ) : null}
+                    <small>Price- {currencyFormatter(price)}</small>
                   </>
                   <TextField
                     size="small"
@@ -256,9 +258,7 @@ function BECEChecker() {
                     value={values.quantity}
                     onChange={handleQuantity}
                     error={Boolean(touched.quantity && errors.quantity)}
-                    helperText={
-                      touched.quantity && errors.quantity && errors.quantity
-                    }
+                    helperText={touched.quantity && errors.quantity}
                   />
                   <TextField
                     size="small"
@@ -278,11 +278,7 @@ function BECEChecker() {
                     value={values.totalAmount}
                     onChange={handleChange("totalAmount")}
                     error={Boolean(touched.totalAmount && errors.totalAmount)}
-                    helperText={
-                      touched.totalAmount &&
-                      errors.totalAmount &&
-                      errors.totalAmount
-                    }
+                    helperText={touched.totalAmount && errors.totalAmount}
                   />
                   <TextField
                     size="small"
@@ -293,7 +289,7 @@ function BECEChecker() {
                     value={values.email}
                     onChange={(e) => setEmail(e.target.value)}
                     error={Boolean(touched.email && errors.email)}
-                    helperText={touched.email && errors.email && errors.email}
+                    helperText={touched.email && errors.email}
                   />
 
                   <TextField
@@ -305,11 +301,7 @@ function BECEChecker() {
                     value={phoneNumber}
                     onChange={handlePhoneNumberChange}
                     error={Boolean(touched.phoneNumber && errors.phoneNumber)}
-                    helperText={
-                      touched.phoneNumber &&
-                      errors.phoneNumber &&
-                      errors.phoneNumber
-                    }
+                    helperText={touched.phoneNumber && errors.phoneNumber}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">

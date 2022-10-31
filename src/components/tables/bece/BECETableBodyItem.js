@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Divider, Stack, Typography } from "@mui/material";
 import { DeleteSweepRounded } from "@mui/icons-material";
 function BECETableBodyItem({ data }) {
+  // console.log(data)
   return (
     <>
       <Stack
@@ -19,15 +20,10 @@ function BECETableBodyItem({ data }) {
           },
         }}
       >
-        <Typography variant="body2">{data.__rowNum__}</Typography>
-        <Typography variant="body2">{data.Serial}</Typography>
-        <Typography variant="body2">{data.Pincode}</Typography>
-        <Button
-          // variant="outlined"
-          size="small"
-          color="secondary"
-          endIcon={<DeleteSweepRounded />}
-        >
+        <Typography variant="body2">{data?.__rowNum__ || data?.id}</Typography>
+        <Typography variant="body2">{data.serial}</Typography>
+        <Typography variant="body2">{data.pin}</Typography>
+        <Button size="small" color="secondary" endIcon={<DeleteSweepRounded />}>
           Remove
         </Button>
       </Stack>
