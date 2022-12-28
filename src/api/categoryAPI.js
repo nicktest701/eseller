@@ -6,7 +6,7 @@ const BASE_URL = "";
 export const getAllVouchersCategory = async (category) => {
   try {
     const res = await axios({
-      url: `${BASE_URL}/category`,
+      url: `/category`,
       method: "GET",
       params: {
         category,
@@ -22,7 +22,7 @@ export const getAllVouchersCategory = async (category) => {
 export const postCategory = async (newCategory) => {
   try {
     const res = await axios({
-      url: `${BASE_URL}/category`,
+      url: `/category`,
       method: "POST",
       data: newCategory,
     });

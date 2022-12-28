@@ -9,7 +9,7 @@ export const getVoucherByVoucherType = async (voucherType) => {
   try {
     const response = await axios({
       method: "GET",
-      url: `${BASE_URL}/voucher`,
+      url: `/voucher`,
       params: {
         voucherType,
       },
@@ -28,7 +28,7 @@ export const addVoucher = async (data) => {
   try {
     const response = await axios({
       method: "POST",
-      url: `${BASE_URL}/voucher`,
+      url: `/voucher`,
       data,
       headers: {
         "Content-Type": "application/json",

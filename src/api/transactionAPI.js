@@ -6,7 +6,7 @@ export const makeTransaction = async (transactionInfo) => {
   try {
     const res = await axios({
       method: "POST",
-      url: `${BASE_URL}/transaction`,
+      url: `/transaction`,
       data: transactionInfo,
       timeout: 15000,
       timeoutErrorMessage: "Error connecting to the server",
@@ -22,7 +22,7 @@ export const getTransaction = async () => {
   try {
     const res = await axios({
       method: "GET",
-      url: `${BASE_URL}/transaction`,
+      url: `/transaction`,
       timeout: 10000,
       timeoutErrorMessage: "Error connecting to the server",
       headers: {
@@ -40,7 +40,7 @@ export const sendVoucherMail = async (id) => {
   try {
     const res = await axios({
       method: "POST",
-      url: `${BASE_URL}/transaction/send-mail`,
+      url: `/transaction/send-mail`,
       data: {
         id,
       },
