@@ -1,9 +1,18 @@
 const mongoose = require("mongoose");
 
-const db = mongoose.createConnection(process.env.MONGO_URL_LOCAL, {
+let MONGO = process.env.MONGO_URL_LOCAL;
+
+if (process.env.NODE_ENV === "production") {
+  MONGO = process.env.MONGO_URL;
+}
+
+const db = mongoose.createConnection(MONGO, {
+  dbName: "Momo",
   serverSelectionTimeoutMS: 0,
   socketTimeoutMS: 0,
   connectTimeoutMS: 0,
+  keepAlive: true,
+
 });
 
 db.on("connected", () => {

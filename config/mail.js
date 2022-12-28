@@ -11,7 +11,7 @@ client.setCredentials({
   refresh_token: process.env.MAIL_REFRESH_TOKEN,
 });
 
-const sendMail = async (transaction_id, email) => {
+const sendMail = async (transaction_id) => {
   try {
     const ACCESS_TOKEN = await client.getAccessToken();
 

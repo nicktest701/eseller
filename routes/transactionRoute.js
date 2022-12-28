@@ -33,7 +33,7 @@ router.post(
 
     //Check if voucher pdf already exists
     if (fs.existsSync(path.join(process.cwd(), "/vouchers/", `${id}.pdf`))) {
-      // const results = await sendMail("");
+      await sendMail(id);
     } else {
       //Generate voucher template
       const template = await generateVoucherTemplate(transaction);
@@ -41,7 +41,7 @@ router.post(
       //Print  voucher template in pdf
       await generateVoucher(template, id);
 
-      // const results = await sendMail("");
+      await sendMail(id);
     }
 
     res.status(200).send(id);
