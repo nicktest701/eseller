@@ -8,7 +8,7 @@ const CategorySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    dataType: {
+    voucherType: {
       type: String,
       unique: true,
     },

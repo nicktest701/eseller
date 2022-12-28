@@ -7,7 +7,7 @@ router.get(
   "/",
   asyncHandler(async (req, res) => {
     const { category } = req.query;
-    const categories = await Category.find({ category });
+    const categories = await Category.find({ category }).sort({ voucherType: 1 });
 
     res.status(200).json(categories);
   })

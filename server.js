@@ -1,15 +1,16 @@
 require("dotenv").config();
+const path = require("path");
 const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
 const logger = require("morgan");
+const createError = require("http-errors");
 const MongoStore = require("connect-mongo");
-
 const db = require("./db/dbConnection");
-const momoRoute = require("./routes/momoRoute");
-const beceRoute = require("./routes/beceCardRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const voucherRoute = require("./routes/voucherRoute");
+const paymentRoute = require("./routes/paymentRoute");
+const transactionRoute = require("./routes/transactionRoute");
 
 //Default server port
 const port = process.env.PORT || 5000;
@@ -17,6 +18,7 @@ const port = process.env.PORT || 5000;
 //initialize express
 const app = express();
 // app.set("trust proxy", 1);
+app.set("view engine", "ejs");
 
 // miiddleawares
 app.use(logger("dev"));
@@ -31,26 +33,37 @@ app.use(
     }),
   })
 );
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(
+  express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 })
+);
 
-//routes
-// app.use("/auth_key", momoRoute);
-app.use("/bece", beceRoute);
+//static folders
+app.use("/views", express.static(path.join(__dirname, "/views")));
+app.use("/vouchers", express.static(path.join(__dirname, "/vouchers")));
+
 app.use("/category", categoryRoute);
 app.use("/voucher", voucherRoute);
+app.use("/payment", paymentRoute);
+app.use("/transaction", transactionRoute);
 
 app.get("/", (req, res) => {
-  res.send("Hello");
+
+  res.send("hello");
 });
 
-app.get((err, req, res, next) => {
-  const error = new Error("Not found");
-  const status = err.statusCode || 500;
+//error handlers
+app.use((req, res, next) => {
+  next(createError.NotFound());
+});
 
-  res.json({
-    status: status,
-    error: error.message,
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  res.send({
+    error: {
+      status: err.status || 500,
+      message: err.message,
+    },
   });
 });
 
@@ -59,5 +72,5 @@ db.asPromise()
     app.listen(port, () => console.log(`App listening on port ${port}!`));
   })
   .catch((error) => {
-    console.log("error connecting server", error);
+    console.log("error connecting server", error.message);
   });

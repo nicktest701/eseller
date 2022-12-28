@@ -4,8 +4,9 @@ const mongoose = require("mongoose");
 
 const VoucherSchema = new mongoose.Schema(
   {
-    dataType: {
-      type: String,
+    category: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Category",
     },
     serial: {
       type: String,
