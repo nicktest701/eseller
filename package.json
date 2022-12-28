@@ -40,7 +40,6 @@
     "yup": "^0.32.11"
   },
   "proxy": "http://localhost:5000",
-  "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
