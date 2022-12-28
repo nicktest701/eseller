@@ -12,7 +12,6 @@ const db = mongoose.createConnection(MONGO, {
   socketTimeoutMS: 0,
   connectTimeoutMS: 0,
   keepAlive: true,
-
 });
 
 db.on("connected", () => {
