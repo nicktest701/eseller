@@ -40,24 +40,24 @@ function VoucherPaymentDetails() {
   const handlePayment = () => {
     setLoading(true);
 
-    // paymentMutate.mutateAsync(payload, {
-    //   onSuccess: (data) => {
-    //     if (data) {
-    //       customDispatch({ type: "loadVouchers", payload: data });
-    //       console.log("Payment done!");
+    paymentMutate.mutateAsync(payload, {
+      onSuccess: (data) => {
+        if (data) {
+          customDispatch({ type: "loadVouchers", payload: data });
+          console.log("Payment done!");
 
-    //       navigate(`/checkout`, {
-    //         replace: true,
-    //         state: {
-    //           transactionId: data?.info?.transaction_id,
-    //         },
-    //       });
-    //     }
-    //   },
-    //   onError: (error) => {
-    //     console.log(error);
-    //   },
-    // });
+          navigate(`/checkout`, {
+            replace: true,
+            state: {
+              transactionId: data?.info?.transaction_id,
+            },
+          });
+        }
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
   };
 
   //close Payment Details
