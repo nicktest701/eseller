@@ -1,6 +1,6 @@
+import React, { useState, useContext } from "react";
 import _ from "lodash";
 import papaparse from "papaparse";
-import React, { useState, useContext, useEffect } from "react";
 import * as XLSX from "xlsx";
 import {
   Alert,
@@ -31,27 +31,21 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const LoadChecker = ({ open, setOpen }) => {
-  const data = localStorage.getItem("dataType");
+  const voucherData = JSON.parse(localStorage.getItem("@voucher_type"));
 
   const { customState, customDispatch } = useContext(CustomContext);
   const [openPreviewChecker, setOpenPreviewChecker] = useState(false);
 
   const [dataPath, setDataPath] = useState("");
-  const [dataType, setDataType] = useState("");
   const [alertErr, setAlertErr] = useState({
     severity: "",
     msg: "",
   });
 
-  useEffect(() => {
-    if (data) {
-      setDataType(data);
-    }
-  }, [data]);
-
   /// load excel data from excel file
   const handleLoadExcelData = async (e) => {
     customDispatch({ type: "openPreviewChecker", payload: true });
+
     let files = e.target.files[0];
 
     //read excel files
@@ -62,10 +56,10 @@ const LoadChecker = ({ open, setOpen }) => {
         if (files.type === "text/csv") {
           const checker = papaparse.parse(e.target.result, {
             header: true,
-            transformHeader: true,
+            // transformHeader: true,
             skipEmptyLines: "greedy",
           });
-
+          //console.log(checker);
           customDispatch({
             type: "loadedChecker",
             payload: {
@@ -110,6 +104,7 @@ const LoadChecker = ({ open, setOpen }) => {
   };
 
   const handleSubmitPins = async () => {
+    // console.log(customState.newCheckers);//
     try {
       const data = await addVoucher(customState.newCheckers);
 
@@ -168,8 +163,8 @@ const LoadChecker = ({ open, setOpen }) => {
               <FormLabel htmlFor="bece">Type</FormLabel>
               <Stack spacing={2} paddingY={2}>
                 <TextField
-                  value={dataType}
-                  onChange={(e) => setDataType(e.target.value)}
+                  value={voucherData.voucherType}
+                  // onChange={(e) => setDataType(e.target.value)}
                   InputProps={{
                     readOnly: true,
                   }}
@@ -234,7 +229,7 @@ const LoadChecker = ({ open, setOpen }) => {
                     fontWeight: "600",
                   }}
                 >
-                  {dataType} Serials & Pincodes
+                  {voucherData.voucherType} Serials & Pincodes
                 </Typography>
               </Stack>
               <Box display="flex" justifyContent="flex-end" paddingY={2}>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/auth_key";
+const BASE_URL = "http://localhost:5000";
 
 export const makePayment = async (paymentInfo) => {
   try {
@@ -8,16 +8,15 @@ export const makePayment = async (paymentInfo) => {
       method: "POST",
       url: `${BASE_URL}/payment`,
       data: paymentInfo,
-      timeout: 15000,
-      timeoutErrorMessage: "Error connecting to the server",
-      headers: {
-        "Content-Type": "application/json",
+      onDownloadProgress: (p) => {
+        console.log(p.loaded);
       },
     });
 
     return res.data;
   } catch (error) {
-    console.log(error.message);
+    console.log(error.response.data);
+    throw error.response.data;
   }
 };
 

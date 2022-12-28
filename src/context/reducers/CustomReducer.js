@@ -11,10 +11,10 @@ export const CustomReducer = (state, action) => {
         openPreviewChecker: action.payload,
       };
 
-    case "waec-checker":
+    case "getVoucherPaymentDetails":
       return {
         ...state,
-        waecCheckerPayload: action.payload,
+        voucherPaymentDetails: action.payload,
       };
 
     case "loadedChecker":
@@ -47,6 +47,12 @@ export const CustomReducer = (state, action) => {
           ...state.category,
           category: action.payload,
         },
+      };
+
+    case "loadVouchers":
+      return {
+        ...state,
+        transaction: action.payload,
       };
 
     default:

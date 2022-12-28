@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "../Dashboard";
 import Login from "../Login";
@@ -8,15 +8,13 @@ import User from "./User";
 import EVoucher from "../EVoucher";
 import Prepaid from "../Prepaid";
 import Airtime from "../Airtime";
-import BECEChecker from "../evoucher/BECEChecker";
-import AddBECEChecker from "../evoucher/add/AddBECEChecker";
 import WAECChecker from "../evoucher/WAECChecker";
 import SchoolPlacement from "../evoucher/SchoolPlacement";
 import SecurityService from "../evoucher/SecurityService";
 import UniversityForms from "../evoucher/UniversityForms";
 import CinemaTickets from "../evoucher/CinemaTickets";
 import StadiaTickets from "../evoucher/StadiaTickets";
-import AddWAECChecker from "../evoucher/add/AddWAECChecker";
+import AddVoucher from "../evoucher/add/AddVoucher";
 import Shop from "../evoucher/Shop";
 import Checkout from "../Checkout";
 import Payment from "../Payment";
@@ -26,8 +24,10 @@ import Checker from "../evoucher/checker";
 import CheckerDashboard from "../evoucher/checker/CheckerDashboard";
 import { PAGES } from "../../constants";
 import AddChecker from "../evoucher/add";
+import PayLoading from "../../components/PayLoading";
 
 function Shell() {
+  const CheckoutPrint = React.lazy(() => import("../CheckoutPrint"));
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -37,7 +37,6 @@ function Shell() {
 
         <Route path="evoucher" element={<EVoucher />}>
           <Route index element={<Shop />} />
-          <Route path="bece-checker" element={<BECEChecker />} />
           <Route path="waec-checker" element={<WAECChecker />} />
           <Route path="school-placement" element={<SchoolPlacement />} />
           <Route path="security-service" element={<SecurityService />} />
@@ -47,7 +46,7 @@ function Shell() {
 
           <Route path="checker" element={<Checker />}>
             <Route index element={<CheckerDashboard />} />
-            <Route path="load-checker" element={<AddBECEChecker />} />
+            {/* <Route path="load-checker" element={<AddBECEChecker />} /> */}
           </Route>
         </Route>
 
@@ -58,7 +57,7 @@ function Shell() {
               <Route
                 key={index}
                 path={item.route}
-                element={<AddWAECChecker {...item} />}
+                element={<AddVoucher {...item} />}
               />
             );
           })}
@@ -70,6 +69,14 @@ function Shell() {
       </Route>
       <Route path="payment" element={<Payment />} />
       <Route path="checkout" element={<Checkout />} />
+      <Route
+        path="checkout-print"
+        element={
+          <Suspense fallback={<PayLoading />}>
+            <CheckoutPrint />{" "}
+          </Suspense>
+        }
+      />
       <Route path="error" element={<ErrorPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

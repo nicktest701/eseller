@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { QueryClientProvider, QueryClient } from "react-query";
 // import Shell from "./pages/layout/Shell";
+import Scrollbars from "react-custom-scrollbars";
 import "./styles/App.scss";
 import { createTheme, ThemeProvider } from "@mui/material";
 import CustomProvider from "./context/providers/CustomProvider";
@@ -74,7 +75,9 @@ function App() {
         <CustomProvider>
           <ThemeProvider theme={theme}>
             <Suspense fallback={<PayLoading />}>
-              <Shell />
+              <Scrollbars autoHide style={{ minHeight: "100vh" }}>
+                <Shell />
+              </Scrollbars>
             </Suspense>
           </ThemeProvider>
         </CustomProvider>

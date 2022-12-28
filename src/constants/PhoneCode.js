@@ -1,6 +1,7 @@
-export function getCode(e) {
+import { IMAGES } from "./images";
+
+export function getCode(code) {
   let providerName = null;
-  const code = e.target.value;
   if (code.startsWith("+")) {
     if (["+23320", "+23350"].includes(code.slice(0, 6))) {
       providerName = "vodafone";
@@ -29,5 +30,31 @@ export function getCode(e) {
     }
   }
 
-  return { code, providerName };
+  switch (providerName) {
+    case "mtn":
+      return {
+        providerName,
+        code,
+        image: IMAGES.mtn_money,
+      };
+    case "vodafone":
+      return {
+        providerName,
+        code,
+        image: IMAGES.vodafone_cash,
+      };
+    case "airteltigo":
+      return {
+        providerName,
+        code,
+        image: IMAGES.airtel_money,
+      };
+
+    default:
+      return {
+        providerName,
+        code,
+        image: null,
+      };
+  }
 }

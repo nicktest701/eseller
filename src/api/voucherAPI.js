@@ -1,46 +1,29 @@
 import axios from "axios";
 
-let BASE_URL;
-if (process.env.NODE_ENV !== "production") {
-  BASE_URL = process.env.REACT_APP_BASE_URL_LOCAL;
-}
+const BASE_URL = "http://localhost:5000";
+// if (process.env.NODE_ENV !== "production") {
+//   BASE_URL = process.env.REACT_APP_BASE_URL_LOCAL;
+// }
 
-export const getVoucherByDataType = async (dataType) => {
+export const getVoucherByVoucherType = async (voucherType) => {
   try {
     const response = await axios({
       method: "GET",
       url: `${BASE_URL}/voucher`,
       params: {
-        dataType,
+        voucherType,
       },
       headers: {
         "Content-Type": "application/json",
       },
     });
-    return response.status === 200 && response.data;
+    return response.data;
   } catch (error) {
-    const err = new Error(error);
-    throw err.message;
+    console.log(error.response.data);
+    throw error.response.data;
   }
 };
-export const buyVoucher = async (paymentInfo) => {
-  try {
-    const response = await axios({
-      method: "GET",
-      url: `${BASE_URL}/voucher/buy`,
-      params: {
-        paymentInfo,
-      },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return response.status === 200 && response.data;
-  } catch (error) {
-    const err = new Error(error);
-    throw err.message;
-  }
-};
+
 export const addVoucher = async (data) => {
   try {
     const response = await axios({
@@ -51,9 +34,9 @@ export const addVoucher = async (data) => {
         "Content-Type": "application/json",
       },
     });
-    return response.status === 201 && response.data;
+    return response.data;
   } catch (error) {
-    const err = new Error(error);
-    throw err.message;
+    console.log(error.response.data);
+    throw error.response.data;
   }
 };

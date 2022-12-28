@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import CheckerCategory from "../../../components/modals/CheckerCategory";
+import CheckerCategory from "../../../components/modals/AddCategory";
 
 const Checker = () => {
   return (

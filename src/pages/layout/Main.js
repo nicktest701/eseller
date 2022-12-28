@@ -8,7 +8,7 @@ function Main() {
   const { customState, customDispatch } = useContext(CustomContext);
 
   return (
-    <main style={{ position: "relative" }}>
+    <main>
       <Fab
         color="primary"
         sx={{

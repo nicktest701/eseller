@@ -7,16 +7,21 @@ import { tableIcons } from "../../config/tableIcons";
 import { Add } from "@mui/icons-material";
 
 import { CustomContext } from "../../context/providers/CustomProvider";
-import { getAllCategoriesByName } from "../../api/categoryAPI";
+import { getAllVouchersCategory } from "../../api/categoryAPI";
+import { voucherCategoryColumns } from "../../mocks/columns";
 
-const WaecCategory = () => {
+const VoucherCategory = (props) => {
+  const modifiedCategoryColumns = voucherCategoryColumns.map((column) => {
+    return { ...column };
+  });
+
   const { customDispatch } = useContext(CustomContext);
 
   const category = localStorage.getItem("category");
 
   const categories = useQuery(
     ["category", category],
-    () => getAllCategoriesByName(category),
+    () => getAllVouchersCategory(category),
     {
       enabled: !!category,
     }
@@ -33,10 +38,10 @@ const WaecCategory = () => {
       }}
     >
       <MaterialTable
-        title="Checkers Information"
+        title={props.category}
         icons={tableIcons}
         components={{
-          Toolbar: (props) => {
+          Toolbar: (params) => {
             return (
               <>
                 <Box display="flex" justifyContent="flex-end" paddingY={1}>
@@ -45,50 +50,15 @@ const WaecCategory = () => {
                     startIcon={<Add />}
                     onClick={handleOpen}
                   >
-                    New Category
+                    New {props.category}
                   </Button>
                 </Box>
-                <MTableToolbar {...props} />
+                <MTableToolbar {...params} />
               </>
             );
           },
         }}
-        columns={[
-          {
-            title: "#",
-            field: "_id",
-            hidden: true,
-          },
-          {
-            title: "Checker",
-            field: "dataType",
-          },
-          {
-            title: "Price",
-            field: "price",
-            type: "currency",
-            currencySetting: {
-              currencyCode: "GHS",
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            },
-          },
-          // {
-          //   title: "Total",
-          //   field: "total",
-          //   type: "numeric",
-          // },
-          // {
-          //   title: "Used",
-          //   field: "used",
-          //   type: "numeric",
-          // },
-          // {
-          //   title: "Available",
-          //   field: "available",
-          //   type: "numeric",
-          // },
-        ]}
+        columns={modifiedCategoryColumns}
         isLoading={categories.isLoading && categories.isFetching}
         data={categories.data ? categories.data : []}
         options={{
@@ -103,4 +73,4 @@ const WaecCategory = () => {
   );
 };
 
-export default WaecCategory;
+export default VoucherCategory;

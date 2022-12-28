@@ -1,35 +1,66 @@
+import { ArrowBackIosSharp, Check } from "@mui/icons-material";
 import {
   Avatar,
   Box,
   Container,
   Divider,
   IconButton,
-  Button,
   Stack,
   Typography,
 } from "@mui/material";
-import React from "react";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { useContext, useState } from "react";
+import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { sendVoucherMail } from "../api/transactionAPI";
 import logo from "../assets/images/coat_of_arms.png";
 import success from "../assets/images/success.png";
-
-const CheckOutItem = ({ title, value }) => {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
-      <Typography color="primary" variant="body2" sx={{fontWeight:'700'}}>
-        {title}
-      </Typography>
-      <Typography variant="body2">{value}</Typography>
-    </Box>
-  );
-};
+import CheckOutItem from "../components/items/CheckOutItem";
+import { CustomContext } from "../context/providers/CustomProvider";
 
 function Checkout() {
+  const navigate = useNavigate();
+
+  const {
+    customState: { transaction },
+  } = useContext(CustomContext);
+
+  // useEffect(() => {
+  //   if (!transaction) {
+  //     navigate("/evoucher", { replace: true });
+  //   }
+  // }, [transaction, navigate]);
+
+  const [loading, setLoading] = useState(true);
+
+  const [previewLoading, setPreviewLoading] = useState(false);
+
+  // Public  vouchers to email
+  const sendVoucher = useQuery(
+    ["publish-vouchers"],
+    () => sendVoucherMail(transaction?._id),
+    {
+      enabled: !!transaction?._id,
+      onSuccess: (data) => {
+        setLoading(false);
+      },
+
+      onError: (error) => {
+        setLoading(false);
+      },
+    }
+  );
+
+  const handlePreviewCheckouts = () => {
+    setPreviewLoading(true);
+    navigate("/checkout-print", {
+      replace: false,
+      state: {
+        id: transaction?._id,
+      },
+    });
+    setPreviewLoading(false);
+  };
   return (
     <div style={{ backgroundColor: "whitesmoke" }}>
       <Box
@@ -50,7 +81,6 @@ function Checkout() {
       </Box>
       <Container
         sx={{
-          backgroundColor: "whitesmoke",
           padding: 8,
           display: "flex",
           justifyContent: "center",
@@ -65,6 +95,9 @@ function Checkout() {
             padding: 6,
           }}
         >
+          <IconButton href="evoucher">
+            <ArrowBackIosSharp />
+          </IconButton>
           <Box
             sx={{
               display: "flex",
@@ -72,9 +105,7 @@ function Checkout() {
               alignItems: "center",
             }}
           >
-            <Typography variant='subtitle1'>
-              Payment Succesful
-            </Typography>
+            <Typography variant="subtitle1">Payment Succesful</Typography>
             <Avatar src={success} />
           </Box>
           <Divider />
@@ -87,21 +118,34 @@ function Checkout() {
             <CheckOutItem title="Mobile No." value="0248798798" />
             <CheckOutItem title="Email Address" value="Akwasi@gmail.com" />
             <CheckOutItem title="Transaction id" value="0248798798" />
-          <Divider flexItem />
+            <Divider flexItem />
           </Stack>
           <Stack
             direction="row"
             alignItems="center"
             justifyContent="center"
-            display="flex"
+            paddingY={2}
           >
-            <Button variant="contained" disableElevation>
-              Print Voucher
-            </Button>
+            <LoadingButton
+              loading={previewLoading}
+              variant="contained"
+              onClick={handlePreviewCheckouts}
+            >
+              Preview Voucher
+            </LoadingButton>
           </Stack>
-          <Button disableElevation href="evoucher">
-            Go back
-          </Button>
+
+          <Stack justifyContent="center">
+            <LoadingButton
+              loading={loading}
+              onClick={() => sendVoucher.refetch()}
+              endIcon={sendVoucher.data ? <Check /> : null}
+            >
+              {sendVoucher.isLoading && "Processing"}
+              {sendVoucher.data && "Email Sent"}
+              {sendVoucher.isError && "Didn't get Email? Send Again"}
+            </LoadingButton>
+          </Stack>
         </Box>
       </Container>
       <Box

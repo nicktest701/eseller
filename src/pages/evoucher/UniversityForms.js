@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState, useContext } from "react";
 import {
   Paper,
   Stack,
@@ -8,57 +8,79 @@ import {
   Box,
   Button,
   Avatar,
-  MenuItem,
   Breadcrumbs,
   Grid,
+  Autocomplete,
+  Container,
 } from "@mui/material";
-import logo from "../../assets/images/waec.jpg";
-// import logo2 from "../../assets/images/waec2.jpg";
-import WaecCheckerPayment from "../../components/modals/WaecCheckerPayment";
+import { Formik } from "formik";
 import { Link } from "react-router-dom";
-import mtn from "../../assets/images/mtn.png";
-import { currencyFormatter, getCode, IMAGES, COLORS } from "../../constants";
+
+import logo from "../../assets/images/waec.jpg";
+
+import { currencyFormatter, getCode, COLORS } from "../../constants";
 import { CustomContext } from "../../context/providers/CustomProvider";
-import { useQuery } from "react-query";
-import { getAllCategoriesByName } from "../../api/categoryAPI";
-
+import { useGetVoucherCategory } from "../../hooks/useGetVoucherCategory";
+import { universityValidationSchema } from "../../config/validationSchema";
 function UniversityForms() {
-  const [openWaec, setOpenWaec] = useState(false);
+  const { customDispatch } = useContext(CustomContext);
 
-  const categoryType = useQuery(
-    ["category"],
-    () => getAllCategoriesByName("university"),
-    {
-      select: (categories) => {
-        return categories.map(({ dataType, price }) => {
-          return {
-            dataType,
-            price,
-          };
-        });
-      },
-    }
-  );
+  const [categoryType, setCategoryType] = useState({
+    id: "",
+    voucherType: "",
+    price: 0,
+  });
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [quantity, setQuantity] = useState(0);
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  ///Get All waec categories
+  const { categories } = useGetVoucherCategory("university");
+
+  ///Service Provider Info
+  const getServiceProviderInfo = useMemo(() => {
+    return getCode(phoneNumber);
+  }, [phoneNumber]);
+
+  //Calculate total amount
+  const grandTotal = useMemo(() => {
+    const total = Number(categoryType.price) * Number(quantity);
+    return total;
+  }, [categoryType, quantity]);
+
+  const initialValues = {
+    categoryType,
+    quantity,
+    totalAmount: grandTotal,
+    fullName,
+    email,
+    phoneNumber,
+  };
+
+  const onSubmit = (values, options) => {
+    console.log(values);
+    values.serviceProvider = getServiceProviderInfo.providerName;
+    values.serviceProviderImage = getServiceProviderInfo.image;
+    values.agentName = "Nana Akwasi";
+    values.agentPhoneNumber = "0234912834";
+    values.agentEmail = "akwasi@gmail.com";
+    values.dataURL = "ghana.waecdirect.org";
+
+    customDispatch({
+      type: "getVoucherPaymentDetails",
+      payload: { open: true, data: values },
+    });
+  };
 
   return (
     <>
       <Box
         sx={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
+          backgroundColor: "whitesmoke",
         }}
       >
-        <Box
-          sx={{
-            width: "inherit",
-            padding: 2,
-            backgroundColor: "whitesmoke",
-          }}
-        >
+        <Container maxWidth="lg" sx={{ paddingY: 2 }}>
           <Breadcrumbs sx={{ paddingBottom: 2 }}>
             <Typography variant="body2">
               <Link to="/"> Home</Link>
@@ -75,210 +97,205 @@ function UniversityForms() {
               UNIVERSITY FORM E-VOUCHER
             </Typography>
           </Stack>
-        </Box>
+        </Container>
 
         <Box
           sx={{
-            position: "relative",
-            width: "100%",
-            height: { xs: "150vh", md: "90vh" },
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             background: `linear-gradient(to top right,rgba(0,0,0,0.9),rgba(0,0,0,0.9)),url(${logo})`,
             backgroundSize: "cover",
-            // filter: "blur(3px)",
-            overFlowY: "scroll",
-          }}
-        ></Box>
-
-        <Paper
-          elevation={1}
-          sx={{
-            position: "absolute",
-            width: { xs: 280, sm: 400, md: 800 },
-            padding: 3,
-            borderTop: "2px solid green",
-            marginLeft: "auto",
-            marginRight: "auto",
-            opacity: 0.9,
-            top: 220,
-            left: 0,
-            right: 0,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
+            paddingY: 5,
           }}
         >
-          <Grid container spacing={3} paddingBottom={8}>
-            <Grid item xs={12} md={6}>
-              <Stack spacing={4}>
-                <Box
-                  sx={{
-                    backgroundColor: COLORS.secondary,
-                    width: "inherit",
-                    padding: 1,
-                    color: "#fff",
-                  }}
-                >
-                  <Typography>Voucher Details</Typography>
-                </Box>
-                <TextField
-                  size="small"
-                  select
-                  variant="outlined"
-                  placeholder="Select University"
-                  label="Select University"
-                  required
-                  fullWidth
-                  InputLabelProps={{
-                    style: {
-                      color: COLORS.secondary,
-                    },
-                  }}
-                >
-                  {categoryType.data &&
-                    categoryType.data.map((item) => {
-                      return (
-                        <MenuItem key={item.dataType} value={item.dataType}>
-                          {item.dataType}
-                          {"---"}
-                          {currencyFormatter(item.price)}
-                        </MenuItem>
-                      );
-                    })}
-                </TextField>
-                <small>Price- {currencyFormatter(1)}</small>
-
-                <TextField
-                  size="small"
-                  type="number"
-                  variant="outlined"
-                  placeholder="Enter Quantity"
-                  label="Quantity"
-                  InputProps={{
-                    inputProps: { min: 1, max: 1000, maxLength: 4 },
-                  }}
-                  InputLabelProps={{
-                    style: {
-                      color: COLORS.secondary,
-                    },
-                  }}
-                  // onInput={(e) => {
-                  //   e.target.value = Math.max(0, parseInt(e.target.value))
-                  //     .toString()
-                  //     .slice(1, 4);
-                  // }}
-                  required
-                  fullWidth
-                />
-                <TextField
-                  size="small"
-                  variant="outlined"
-                  placeholder="Total Amount"
-                  label="Total Amount"
-                  required
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">GH¢</InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">p</InputAdornment>
-                    ),
-                    readOnly: true,
-                  }}
-                  InputLabelProps={{
-                    style: {
-                      color: COLORS.secondary,
-                    },
-                  }}
-                />
-              </Stack>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Stack spacing={4}>
-                <Box
-                  sx={{
-                    backgroundColor: COLORS.secondary,
-                    width: "inherit",
-                    padding: 1,
-                    color: "#fff",
-                  }}
-                >
-                  <Typography>Personal Details</Typography>
-                </Box>
-
-                <TextField
-                  size="small"
-                  variant="outlined"
-                  placeholder="Enter your Name"
-                  label="Full Name"
-                  InputLabelProps={{
-                    style: {
-                      color: COLORS.secondary,
-                    },
-                  }}
-                  required
-                  fullWidth
-                />
-
-                <TextField
-                  size="small"
-                  type="email"
-                  variant="outlined"
-                  placeholder="Enter Email Address here"
-                  label="Email Address"
-                  required
-                  InputLabelProps={{
-                    style: {
-                      color: COLORS.secondary,
-                    },
-                  }}
-                />
-
-                <TextField
-                  size="small"
-                  type="tel"
-                  variant="outlined"
-                  placeholder="Enter Phone Number"
-                  label="Phone Number"
-                  required
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Avatar
-                          variant="square"
-                          src={mtn}
-                          sx={{ width: 25, height: 20, marginRight: 2 }}
-                        />
-                      </InputAdornment>
-                    ),
-                  }}
-                  InputLabelProps={{
-                    style: {
-                      color: COLORS.secondary,
-                    },
-                  }}
-                />
-              </Stack>
-            </Grid>
-          </Grid>
-
-          <Button
-            variant="contained"
-            disableElevation
-            disableRipple
-            size="large"
-            sx={{ paddingX: 12 }}
-            onClick={() => setOpenWaec(true)}
+          <Formik
+            initialValues={initialValues}
+            validationSchema={universityValidationSchema}
+            enableReinitialize={true}
+            onSubmit={onSubmit}
           >
-            Buy
-          </Button>
-        </Paper>
-      </Box>
+            {({
+              errors,
+              values,
+              touched,
+              handleChange,
+              handleSubmit,
+              handleBlur,
+            }) => {
+              return (
+                <Container
+                  sx={{
+                    maxWidth: { xs: 260, sm: 400, md: 800 },
+                    padding: { xs: 2, sm: 3 },
+                    bgcolor: "primary.contrastText",
+                  }}
+                >
+                  <Grid container spacing={3} paddingBottom={3}>
+                    <Grid item xs={12} md={6}>
+                      <Stack spacing={3}>
+                        <Box
+                          sx={{
+                            bgcolor: "secondary.main",
+                            width: "inherit",
+                            padding: 1,
+                            color: "#fff",
+                          }}
+                        >
+                          <Typography>Voucher Details</Typography>
+                        </Box>
+                        <Autocomplete
+                          options={categories}
+                          size="small"
+                          value={categoryType}
+                          onChange={(e, value) => setCategoryType(value)}
+                          noOptionsText="No Voucher available"
+                          isOptionEqualToValue={(option, value) =>
+                            value.id === undefined ||
+                            value.id === "" ||
+                            option.id === value.id
+                          }
+                          getOptionLabel={(option) => option.voucherType || ""}
+                          renderInput={(params) => {
+                            return (
+                              <TextField
+                                {...params}
+                                label=" Voucher Type"
+                                size="small"
+                                error={Boolean(
+                                  touched?.categoryType?.voucherType &&
+                                    errors?.categoryType?.voucherType
+                                )}
+                                helperText={
+                                  touched?.categoryType?.voucherType &&
+                                  errors?.categoryType?.voucherType
+                                }
+                              />
+                            );
+                          }}
+                        />
+                        <small style={{ textAlign: "center" }}>
+                          Price- {currencyFormatter(categoryType?.price)}
+                        </small>
 
-      <WaecCheckerPayment open={openWaec} setOpen={setOpenWaec} />
+                        <TextField
+                          size="small"
+                          type="number"
+                          inputMode="numeric"
+                          variant="outlined"
+                          label="Quantity"
+                          InputProps={{
+                            inputProps: { min: 1, max: 1000, maxLength: 4 },
+                          }}
+                          required
+                          fullWidth
+                          value={values.quantity}
+                          onChange={(e) => setQuantity(e.target.value)}
+                          error={Boolean(touched.quantity && errors.quantity)}
+                          helperText={touched.quantity && errors.quantity}
+                        />
+                        <TextField
+                          size="small"
+                          variant="outlined"
+                          placeholder="Total Amount"
+                          label="Total Amount"
+                          required
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                GH¢
+                              </InputAdornment>
+                            ),
+                            endAdornment: (
+                              <InputAdornment position="end">p</InputAdornment>
+                            ),
+                            readOnly: true,
+                          }}
+                          value={values.totalAmount}
+                        />
+                      </Stack>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Stack spacing={3}>
+                        <Box
+                          sx={{
+                            bgcolor: "secondary.main",
+                            width: "inherit",
+                            padding: 1,
+                            color: "#fff",
+                          }}
+                        >
+                          <Typography>Personal Details</Typography>
+                        </Box>
+
+                        <TextField
+                          size="small"
+                          variant="outlined"
+                          placeholder="Enter your Name"
+                          label="Full Name"
+                          required
+                          value={values.fullName}
+                          onChange={(e) => setFullName(e.target.value)}
+                          error={Boolean(touched.fullName && errors.fullName)}
+                          helperText={touched.fullName && errors.fullName}
+                        />
+
+                        <TextField
+                          size="small"
+                          type="email"
+                          variant="outlined"
+                          label="Email Address"
+                          required
+                          value={values.email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          error={Boolean(touched.email && errors.email)}
+                          helperText={touched.email && errors.email}
+                        />
+
+                        <TextField
+                          size="small"
+                          type="tel"
+                          inputMode="tel"
+                          variant="outlined"
+                          label="Phone Number"
+                          required
+                          value={phoneNumber}
+                          onChange={(e) => setPhoneNumber(e.target.value)}
+                          error={Boolean(
+                            touched.phoneNumber && errors.phoneNumber
+                          )}
+                          helperText={touched.phoneNumber && errors.phoneNumber}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <Avatar
+                                  variant="square"
+                                  src={getServiceProviderInfo?.image}
+                                  sx={{ width: 25, height: 20, marginRight: 1 }}
+                                />
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Stack>
+                    </Grid>
+                  </Grid>
+
+                  <Stack justifyContent="center" alignItems="center">
+                    <Button
+                      variant="contained"
+                      onClick={handleSubmit}
+                      sx={{ width: { xs: "100%", sm: 250 } }}
+                    >
+                      Buy
+                    </Button>
+                  </Stack>
+                </Container>
+              );
+            }}
+          </Formik>
+        </Box>
+      </Box>
     </>
   );
 }

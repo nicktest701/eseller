@@ -22,7 +22,6 @@ import { CustomContext } from "../../context/providers/CustomProvider";
 function Header() {
   const { customState, customDispatch } = useContext(CustomContext);
 
-  const [openSidebar, setOpenSidebar] = useState(false);
   const [shadow, setShadow] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
@@ -37,11 +36,9 @@ function Header() {
   };
 
   window.onscroll = function (e) {
-    if (window.scrollY > 10) {
+    if (window.scrollY > 5) {
       setShadow({
         boxShadow: `2px 3px 5px rgba(0,0,0,0.2)`,
-        borderBottom: "2px solid green",
-        background: "blue",
       });
     } else {
       setShadow(null);

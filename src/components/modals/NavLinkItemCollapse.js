@@ -33,7 +33,7 @@ function NavLinkItemCollapse({ to, title, icon }) {
         </ListItemIcon>
 
         <NavLink to="add" style={linkStyle}>
-          Load Checker & E-Vouchers
+          Load E-Vouchers
         </NavLink>
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>

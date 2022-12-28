@@ -12,7 +12,8 @@ function SubHeader({ title, to }) {
         margin="auto"
         maxWidth="1000px"
       >
-        <Link to={to}>
+        {/* <Link to={to}> */}
+        <Link to='/'>
           <IconButton sx={{ marginRight: 2 }}>
             <ArrowBackRounded />
           </IconButton>

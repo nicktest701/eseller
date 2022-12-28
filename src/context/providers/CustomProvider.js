@@ -6,7 +6,10 @@ function CustomProvider({ children }) {
   const initialValues = {
     openSidebar: false,
     openPreviewChecker: false,
-    waecCheckerPayload: {},
+    voucherPaymentDetails: {
+      open: false,
+      data: {},
+    },
     loadedChecker: {
       meta: [],
       data: [],
@@ -17,6 +20,8 @@ function CustomProvider({ children }) {
       open: false,
       category: "",
     },
+    ///vouchers
+    transaction: {},
   };
 
   const [customState, customDispatch] = useReducer(

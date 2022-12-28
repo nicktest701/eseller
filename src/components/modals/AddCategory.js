@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useMemo } from "react";
 import { LoadingButton } from "@mui/lab";
 import {
   Autocomplete,
@@ -16,55 +16,38 @@ import {
 import { useMutation, useQueryClient } from "react-query";
 import { Formik } from "formik";
 import { CustomContext } from "../../context/providers/CustomProvider";
-import { newCategory } from "../../api/categoryAPI";
-import { CATEGORY } from "../../constants";
+import { postCategory } from "../../api/categoryAPI";
+import { addCategoryOptions } from "../../config/addCategoryOptions";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const CheckerCategory = () => {
+const AddCategory = () => {
+  const category = localStorage.getItem("category");
+
+  //context
   const queryClient = useQueryClient();
   const { customState, customDispatch } = useContext(CustomContext);
-  const [autoCompleteLabel, setAutoCompleteLabel] = useState([]);
-  const [autoOptions, setAutoOptions] = useState([]);
-  const [dataType, setDataType] = useState("");
 
-  useEffect(() => {
-    if (localStorage.getItem("category")) {
-      const category = localStorage.getItem("category");
-      let cat = [];
-      let autocompleteLabel = "Category here";
-      switch (category) {
-        case "waec":
-          cat = CATEGORY.exams;
-          autocompleteLabel = "Exams type";
-          break;
-        case "university":
-          cat = CATEGORY.university;
-          autocompleteLabel = "University";
-          break;
-        default:
-          cat = [];
-      }
-      setAutoOptions(cat);
-      setAutoCompleteLabel(autocompleteLabel);
-    }
-  }, []);
+  //state
+  const [voucherType, setVoucherType] = useState("");
 
-  const handleClose = () => {
-    customDispatch({ type: "openAddCategory", payload: false });
-  };
+  //load options
+  const options = useMemo(() => {
+    setVoucherType("");
+    return addCategoryOptions(category);
+  }, [category]);
 
   const initialValues = {
-    category: localStorage.getItem("category") || "",
-    dataType,
-    price: 0,
+    category: category || "",
+    voucherType,
+    price: Number(0),
   };
 
-  const { mutateAsync } = useMutation(newCategory);
+  const { mutateAsync } = useMutation(postCategory);
   const onSubmit = (values, option) => {
-    // console.log(values);
+    //  console.log(values);
     mutateAsync(values, {
       onSettled: () => {
         option.setSubmitting(false);
@@ -78,6 +61,11 @@ const CheckerCategory = () => {
         console.log(error);
       },
     });
+  };
+
+  ///Close Add Category
+  const handleClose = () => {
+    customDispatch({ type: "openAddCategory", payload: false });
   };
 
   return (
@@ -102,26 +90,23 @@ const CheckerCategory = () => {
             open={customState.category.open}
             onClose={handleClose}
           >
-            <DialogTitle>New Category</DialogTitle>
+            <DialogTitle>New {options.autocompleteLabel}</DialogTitle>
             <DialogContent>
               <Stack rowGap={2} paddingY={2}>
                 <Autocomplete
-                  options={autoOptions}
+                  options={options.cat}
                   freeSolo
                   noOptionsText="No option avaiable"
-                  value={dataType || null}
-                  onChange={(e, value) => setDataType(value)}
+                  value={voucherType || null}
+                  onInputChange={(e, value) => setVoucherType(value)}
                   isOptionEqualToValue={(option, value) => option === value}
                   renderInput={(props) => (
-                    <TextField
-                      {...props}
-                      label={autoCompleteLabel}
-                      onChange={(e) => setDataType(e.target.value)}
-                    />
+                    <TextField {...props} label={options.autocompleteLabel} />
                   )}
                 />
                 <TextField
                   type="number"
+                  inputMode="decimal"
                   label="Price"
                   placeholder="Price here"
                   value={values.price}
@@ -144,7 +129,7 @@ const CheckerCategory = () => {
             <DialogActions sx={{ padding: 1 }}>
               <Button onClick={handleClose}>Cancel</Button>
               <LoadingButton variant="contained" onClick={handleSubmit}>
-                Add Category
+                Add
               </LoadingButton>
             </DialogActions>
           </Dialog>
@@ -154,4 +139,4 @@ const CheckerCategory = () => {
   );
 };
 
-export default React.memo(CheckerCategory);
+export default React.memo(AddCategory);

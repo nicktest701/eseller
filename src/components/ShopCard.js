@@ -2,14 +2,14 @@ import React from "react";
 import {
   Card,
   CardHeader,
-  CardMedia,
   CardContent,
   CardActions,
   Typography,
+  Avatar,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
-function ShopCard({ title, img, content, path, state }) {
+function ShopCard({ title, img, content, path }) {
   const cardStyles = () => {
     return {
       display: "flex",
@@ -31,19 +31,17 @@ function ShopCard({ title, img, content, path, state }) {
         sx={{ textAlign: "center", fontSize: 16 }}
         component="h6"
       />
-      <CardMedia
-        component="img"
-        image={img}
+      <Avatar
+        variant="square"
+        src={img}
         alt="imag"
-        height={80}
-        width={80}
-        style={{ objectFit: "contain" }}
+        sx={{ width: 80, height: 80 }}
       />
       <CardContent>
         <Typography variant="body2">{content}</Typography>
       </CardContent>
       <CardActions>
-        <Link className="button-link" to={path} >
+        <Link className="button-link" to={path}>
           Proceed to buy
         </Link>
       </CardActions>

@@ -4,13 +4,13 @@ import { Container, Box, Tab } from "@mui/material";
 import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
 import { Report } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import WaecCategory from "../../../components/tabs/WaecCategory";
-import WaecLoadData from "../../../components/tabs/WaecLoadData";
+import VoucherCategory from "../../../components/tabs/VoucherCategory";
+import LoadVoucher from "../../../components/tabs/LoadVoucher";
 import SubHeader from "../../../components/SubHeader";
 import SubCaption from "../../../components/SubCaption";
-import CheckerCategory from "../../../components/modals/CheckerCategory";
+import AddCategory from "../../../components/modals/AddCategory";
 import { useNavigate } from "react-router-dom";
-const AddWAECChecker = ({ title, note, type }) => {
+const AddVoucher = ({ title, category, note, type }) => {
   const navigate = useNavigate();
   const [tab, setTab] = useState("1");
 
@@ -30,14 +30,10 @@ const AddWAECChecker = ({ title, note, type }) => {
         </Box>
 
         <TabContext value={tab}>
-          <TabList
-            onChange={(e, value) => setTab(value)}
-            aria-label="Category"
-            // centered
-          >
+          <TabList onChange={(e, value) => setTab(value)} aria-label="Category">
             <Tab
               value="1"
-              label="Category"
+              label={category}
               icon={<CategoryRoundedIcon />}
               iconPosition="start"
             />
@@ -49,19 +45,19 @@ const AddWAECChecker = ({ title, note, type }) => {
             />
           </TabList>
           <TabPanel value="1">
-            <WaecCategory />
+            <VoucherCategory category={category} />
           </TabPanel>
           <TabPanel value="2">
-            <WaecLoadData />
+            <LoadVoucher category={category} />
           </TabPanel>
         </TabContext>
       </Container>
 
-      <CheckerCategory />
+      <AddCategory />
     </>
   );
 };
 
-AddWAECChecker.propTypes = {};
+AddVoucher.propTypes = {};
 
-export default AddWAECChecker;
+export default AddVoucher;

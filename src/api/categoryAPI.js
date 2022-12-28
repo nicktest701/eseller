@@ -3,16 +3,15 @@ const BASE_URL = "http://localhost:5000";
 
 ///
 
-export const getAllCategoriesByName = async (category) => {
+export const getAllVouchersCategory = async (category) => {
   try {
     const res = await axios({
-      url: `${BASE_URL}/category?category=${category}`,
+      url: `${BASE_URL}/category`,
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+      params: {
+        category,
       },
     });
-
     return res.data;
   } catch (error) {
     return error.response.data;
@@ -20,15 +19,12 @@ export const getAllCategoriesByName = async (category) => {
 };
 
 ///
-export const newCategory = async (newCategory) => {
+export const postCategory = async (newCategory) => {
   try {
     const res = await axios({
       url: `${BASE_URL}/category`,
       method: "POST",
       data: newCategory,
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
     return res.data;
   } catch (error) {

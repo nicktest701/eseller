@@ -11,7 +11,7 @@ import PreviewCheckerTable from "../tables/bece/PreviewCheckerTable";
 import PropTypes from "prop-types";
 
 function PreviewChecker({ open, setOpen }) {
-  const dataType = localStorage.getItem("dataType");
+  const voucherData = JSON.parse(localStorage.getItem("@voucher_type"));
   const { customState, customDispatch } = useContext(CustomContext);
   const checker = customState.loadedChecker;
   const [isMatch, setIsMatch] = useState(false);
@@ -20,7 +20,8 @@ function PreviewChecker({ open, setOpen }) {
     const newData = checker.data.map((data) => {
       return {
         ...data,
-        dataType,
+        category: voucherData.id,
+        voucher: voucherData.voucherType,
       };
     });
 

@@ -13,12 +13,7 @@ import {
   Breadcrumbs,
 } from "@mui/material";
 import logo from "../../assets/images/waec.jpg";
-// import logo2 from "../../assets/images/waec2.jpg";
-import WaecCheckerPayment from "../../components/modals/WaecCheckerPayment";
-import { COLORS } from "../../constants";
 function SchoolPlacement() {
-  const [openWaec, setOpenWaec] = useState(false);
-
   return (
     <>
       <Box
@@ -32,12 +27,6 @@ function SchoolPlacement() {
         }}
       >
         <Stack
-          sx={
-            {
-              // background: "linear-gradient(to top right,#333,green)",
-              // color: "#fff",
-            }
-          }
           width={"100%"}
           height={60}
           spacing={2}
@@ -109,16 +98,6 @@ function SchoolPlacement() {
               InputProps={{
                 inputProps: { min: 1, max: 1000, maxLength: 4 },
               }}
-              InputLabelProps={{
-                style: {
-                  color: COLORS.secondary,
-                },
-              }}
-              // onInput={(e) => {
-              //   e.target.value = Math.max(0, parseInt(e.target.value))
-              //     .toString()
-              //     .slice(1, 4);
-              // }}
               required
               fullWidth
             />
@@ -135,11 +114,6 @@ function SchoolPlacement() {
                 endAdornment: <InputAdornment position="end">p</InputAdornment>,
                 readOnly: true,
               }}
-              InputLabelProps={{
-                style: {
-                  color: COLORS.secondary,
-                },
-              }}
             />
             <TextField
               size="small"
@@ -148,11 +122,6 @@ function SchoolPlacement() {
               placeholder="Enter Email Address here"
               label="Email Address"
               required
-              InputLabelProps={{
-                style: {
-                  color: COLORS.secondary,
-                },
-              }}
             />
 
             <TextField
@@ -164,7 +133,7 @@ function SchoolPlacement() {
               required
               InputLabelProps={{
                 style: {
-                  color: COLORS.secondary,
+                  color: "secondary.main",
                 },
               }}
             />
@@ -175,7 +144,6 @@ function SchoolPlacement() {
                 disableRipple
                 size="large"
                 sx={{ paddingX: 5 }}
-                onClick={() => setOpenWaec(true)}
               >
                 Buy
               </Button>
@@ -183,8 +151,6 @@ function SchoolPlacement() {
           </Stack>
         </Paper>
       </Box>
-
-      <WaecCheckerPayment open={openWaec} setOpen={setOpenWaec} />
     </>
   );
 }

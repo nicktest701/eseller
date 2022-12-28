@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import logo from "../../assets/images/waec.jpg";
 // import logo2 from "../../assets/images/waec2.jpg";
-import WaecCheckerPayment from "../../components/modals/WaecCheckerPayment";
+import WaecCheckerPayment from "../../components/modals/VoucherPaymentDetails";
 import { Link } from "react-router-dom";
 import mtn from "../../assets/images/mtn.png";
 import { COLORS } from "../../constants";
