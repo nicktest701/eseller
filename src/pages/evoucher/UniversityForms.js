@@ -1,6 +1,5 @@
 import React, { useMemo, useState, useContext } from "react";
 import {
-  Paper,
   Stack,
   TextField,
   Typography,
@@ -18,7 +17,7 @@ import { Link } from "react-router-dom";
 
 import logo from "../../assets/images/waec.jpg";
 
-import { currencyFormatter, getCode, COLORS } from "../../constants";
+import { currencyFormatter, getCode } from "../../constants";
 import { CustomContext } from "../../context/providers/CustomProvider";
 import { useGetVoucherCategory } from "../../hooks/useGetVoucherCategory";
 import { universityValidationSchema } from "../../config/validationSchema";
@@ -62,9 +61,9 @@ function UniversityForms() {
     console.log(values);
     values.serviceProvider = getServiceProviderInfo.providerName;
     values.serviceProviderImage = getServiceProviderInfo.image;
-    values.agentName = "Nana Akwasi";
-    values.agentPhoneNumber = "0234912834";
-    values.agentEmail = "akwasi@gmail.com";
+    values.agentName = fullName;
+    values.agentPhoneNumber = phoneNumber;
+    values.agentEmail = email;
     values.dataURL = "ghana.waecdirect.org";
 
     customDispatch({
@@ -160,7 +159,7 @@ function UniversityForms() {
                             return (
                               <TextField
                                 {...params}
-                                label=" Voucher Type"
+                                label="Select University"
                                 size="small"
                                 error={Boolean(
                                   touched?.categoryType?.voucherType &&

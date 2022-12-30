@@ -21,11 +21,11 @@ const CheckerTable = () => {
         },
         {
           title: "Pin",
-          field: "serial",
+          field: "pin",
         },
         {
           title: "Voucher",
-          field: "dataType",
+          field: "voucher",
         },
       ]}
       data={

@@ -42,13 +42,13 @@ const LoadChecker = ({ open, setOpen }) => {
     msg: "",
   });
 
-  /// load excel data from excel file
+  /// load data from  file
   const handleLoadExcelData = async (e) => {
     customDispatch({ type: "openPreviewChecker", payload: true });
 
     let files = e.target.files[0];
 
-    //read excel files
+    //read files
     try {
       let reader = new FileReader();
 
@@ -59,7 +59,7 @@ const LoadChecker = ({ open, setOpen }) => {
             // transformHeader: true,
             skipEmptyLines: "greedy",
           });
-          //console.log(checker);
+          // console.log(checker);
           customDispatch({
             type: "loadedChecker",
             payload: {
@@ -99,12 +99,23 @@ const LoadChecker = ({ open, setOpen }) => {
 
       setDataPath(files.name);
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
+      setAlertErr({
+        severity: "error",
+        msg: "Could not load the specific file",
+      });
+      customDispatch({
+        type: "loadedChecker",
+        payload: {
+          meta: [],
+          data: [],
+        },
+      });
     }
   };
 
   const handleSubmitPins = async () => {
-    // console.log(customState.newCheckers);//
+
     try {
       const data = await addVoucher(customState.newCheckers);
 

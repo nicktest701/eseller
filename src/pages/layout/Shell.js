@@ -46,8 +46,7 @@ function Shell() {
 
           <Route path="checker" element={<Checker />}>
             <Route index element={<CheckerDashboard />} />
-            {/* <Route path="load-checker" element={<AddBECEChecker />} /> */}
-          </Route>
+        </Route>
         </Route>
 
         <Route path="/add" element={<AddChecker />}>
@@ -73,7 +72,7 @@ function Shell() {
         path="checkout-print"
         element={
           <Suspense fallback={<PayLoading />}>
-            <CheckoutPrint />{" "}
+            <CheckoutPrint />
           </Suspense>
         }
       />

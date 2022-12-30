@@ -1,25 +1,19 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, forwardRef } from "react";
 import Avatar from "@mui/material/Avatar";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import Typography from "@mui/material/Typography";
-import {
-  Box,
-  DialogActions,
-  DialogContent,
-  IconButton,
-  Stack,
-} from "@mui/material";
+import { Box, DialogContent, IconButton, Stack } from "@mui/material";
 import Slide from "@mui/material/Slide";
 import { LoadingButton } from "@mui/lab";
-import { CloseSharp, MoneyRounded, } from "@mui/icons-material";
+import { CloseSharp, MoneyRounded } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { CustomContext } from "../../context/providers/CustomProvider";
 import { currencyFormatter } from "../../constants";
 import { makePayment } from "../../api/paymentAPI";
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
@@ -43,6 +37,9 @@ function VoucherPaymentDetails() {
     paymentMutate.mutateAsync(payload, {
       onSuccess: (data) => {
         if (data) {
+          // if (data.code === "201") {
+          //   window.location.href = data?.data?.paylinkUrl;
+          // }
           customDispatch({ type: "loadVouchers", payload: data });
           console.log("Payment done!");
 
@@ -50,7 +47,13 @@ function VoucherPaymentDetails() {
             replace: true,
             state: {
               transactionId: data?.info?.transaction_id,
+              voucherCategory: data?.info.voucherCategory,
             },
+          });
+
+          customDispatch({
+            type: "getVoucherPaymentDetails",
+            payload: { open: false, data: {} },
           });
         }
       },

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useMemo } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import { LoadingButton } from "@mui/lab";
 import {
   Autocomplete,
@@ -8,7 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   InputAdornment,
-  Slide,
+
   Stack,
   TextField,
   Typography,
@@ -18,10 +18,8 @@ import { Formik } from "formik";
 import { CustomContext } from "../../context/providers/CustomProvider";
 import { postCategory } from "../../api/categoryAPI";
 import { addCategoryOptions } from "../../config/addCategoryOptions";
+import Transition from "../Transition";
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const AddCategory = () => {
   const category = localStorage.getItem("category");
