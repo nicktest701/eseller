@@ -53,11 +53,13 @@ router.post(
         agentPhoneNumber,
         agentEmail,
         dataURL,
+        voucherCategory: voucher[0].category.category,
       },
       vouchers: modifiedVoucher,
     };
 
-    // requestPayment(agentPhoneNumber);
+    // const data = await requestPayment(agentPhoneNumber);
+
     const transaction = await Transaction.create(transactionInfo);
 
     if (_.isEmpty(transaction)) {
@@ -65,8 +67,7 @@ router.post(
         .status(400)
         .json("Error processing your request.Please try again");
     }
-
-    console.log(transaction._id);
+    console.log(transaction?.info);
 
     res.status(200).json(transaction);
   })

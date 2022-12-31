@@ -5,7 +5,7 @@ const path = require("path");
 module.exports = generateVoucherTemplate = async (data) => {
   return new Promise((resolve, reject) => {
     fs.readFile(
-      path.join(process.cwd(), "/views/", "voucher.ejs"),
+      path.join(process.cwd(), "/views/", `${data?.info?.voucherCategory}.ejs`),
       { encoding: "utf8" },
       (err, compiledHtmlText) => {
         if (err) reject(err);

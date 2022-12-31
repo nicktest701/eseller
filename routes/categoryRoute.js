@@ -1,13 +1,19 @@
 const router = require("express").Router();
 const asyncHandler = require("express-async-handler");
-
+const _ = require("lodash");
 const Category = require("../models/categoryModel");
 
 router.get(
   "/",
   asyncHandler(async (req, res) => {
     const { category } = req.query;
-    const categories = await Category.find({ category }).sort({ voucherType: 1 });
+    const categories = await Category.find({ category }).sort({
+      voucherType: 1,
+    });
+
+    if (_.isEmpty(categories)) {
+      return res.status(200).json([]);
+    }
 
     res.status(200).json(categories);
   })
@@ -17,7 +23,6 @@ router.post(
   "/",
   asyncHandler(async (req, res) => {
     const newCategory = req.body;
-    console.log(newCategory);
     const category = await Category.create(newCategory);
     res.sendStatus(201);
   })

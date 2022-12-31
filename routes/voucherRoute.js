@@ -14,7 +14,7 @@ router.get(
     const vouchers = await Voucher.find({
       category: ObjectId(voucherType),
     }).populate("category");
-    // console.log(vouchers);
+
     const modifiedVouchers = vouchers.map(
       ({ _id, pin, serial, active, category }) => {
         return {
@@ -26,7 +26,7 @@ router.get(
         };
       }
     );
-    console.log(modifiedVouchers[0]);
+ 
 
     res.status(200).json(modifiedVouchers);
   })

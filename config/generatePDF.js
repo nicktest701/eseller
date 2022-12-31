@@ -5,16 +5,15 @@ const generateVoucher = async (htmltext, transaction_id) => {
 
   //page
   const page = await browser.newPage();
-  await page.setContent(htmltext);
+  await page.setContent(htmltext, { waitUntil: "domcontentloaded" });
   await page.emulateMediaType("screen");
-  await page.evaluate(() => matchMedia("screen").matches);
 
   //pdf
   await page.pdf({
     path: `vouchers/${transaction_id}.pdf`,
-    format: "A4",
+    format: "LETTER",
     printBackground: true,
-    landscape: true,
+    // landscape: true,
     timeout: 0,
   });
 
