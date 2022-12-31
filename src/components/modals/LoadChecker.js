@@ -31,7 +31,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const LoadChecker = ({ open, setOpen }) => {
-  const voucherData = JSON.parse(localStorage.getItem("@voucher_type"));
+  const voucherData = JSON.parse(localStorage.getItem("@voucher_type")) || "";
 
   const { customState, customDispatch } = useContext(CustomContext);
   const [openPreviewChecker, setOpenPreviewChecker] = useState(false);
@@ -115,7 +115,6 @@ const LoadChecker = ({ open, setOpen }) => {
   };
 
   const handleSubmitPins = async () => {
-
     try {
       const data = await addVoucher(customState.newCheckers);
 
@@ -174,7 +173,7 @@ const LoadChecker = ({ open, setOpen }) => {
               <FormLabel htmlFor="bece">Type</FormLabel>
               <Stack spacing={2} paddingY={2}>
                 <TextField
-                  value={voucherData.voucherType}
+                  value={voucherData?.voucherType || "F"}
                   // onChange={(e) => setDataType(e.target.value)}
                   InputProps={{
                     readOnly: true,
@@ -240,7 +239,7 @@ const LoadChecker = ({ open, setOpen }) => {
                     fontWeight: "600",
                   }}
                 >
-                  {voucherData.voucherType} Serials & Pincodes
+                  {voucherData?.voucherType} Serials & Pincodes
                 </Typography>
               </Stack>
               <Box display="flex" justifyContent="flex-end" paddingY={2}>
