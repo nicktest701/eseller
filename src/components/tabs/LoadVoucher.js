@@ -3,6 +3,7 @@ import { Autocomplete, Box, Button, TextField } from "@mui/material";
 import MaterialTable, { MTableToolbar } from "material-table";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
+import _ from "lodash";
 import { getAllVouchersCategory } from "../../api/categoryAPI";
 import { getVoucherByVoucherType } from "../../api/voucherAPI";
 import { tableIcons } from "../../config/tableIcons";
@@ -29,13 +30,15 @@ const LoadVoucher = () => {
   useQuery(["category", category], () => getAllVouchersCategory(category), {
     enabled: !!category,
     onSuccess: (categories) => {
-      const options = categories.map(({ voucherType, _id }) => {
-        return {
-          id: _id,
-          voucherType,
-        };
-      });
-      setVoucherOptions(options);
+      if (!_.isEmpty(categories)) {
+        const options = categories.map(({ voucherType, _id }) => {
+          return {
+            id: _id,
+            voucherType,
+          };
+        });
+        setVoucherOptions(options);
+      }
     },
   });
 

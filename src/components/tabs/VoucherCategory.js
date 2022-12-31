@@ -60,7 +60,7 @@ const VoucherCategory = (props) => {
         }}
         columns={modifiedCategoryColumns}
         isLoading={categories.isLoading && categories.isFetching}
-        data={categories.data ? categories.data : []}
+        data={categories?.data !== undefined ? categories?.data : []}
         options={{
           search: false,
           //   paging: false,
