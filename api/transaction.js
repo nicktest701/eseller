@@ -9,29 +9,33 @@ const requestPayment = async (mobileNumber) => {
   const clientReference = crypto.randomUUID();
 
   // mobileNumber = "YOUR_mobileNumber_PARAMETER";
+  try {
+    const res = await axios({
+      method: "POST",
+      url: `${process.env.TRANS_API_URL}/request-money/${mobileNumber}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + generate_BASIC_AUTH(id, secret),
+      },
+      data: {
+        amount: 0,
+        title: "FrebbyTech Consults",
+        description: "Request to make payment for vouchers bought",
+        clientReference,
+        callbackUrl:
+          "https://webhook.site/4a5f8870-239c-44d7-8991-93ce078525a1",
+        cancellationUrl:
+          "https://webhook.site/4a5f8870-239c-44d7-8991-93ce078525a1",
+        returnUrl: "https://webhook.site/4a5f8870-239c-44d7-8991-93ce078525a1",
+        // logo: "http://example.com",
+      },
+    });
 
-  const resp = await axios({
-    method: "POST",
-    url: `${process.env.TRANS_API_URL}/request-money/${mobileNumber}`,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Basic " + generate_BASIC_AUTH(id, secret),
-    },
-    data: {
-      amount: 1,
-      title: "FrebbyTech Consults",
-      description: "Request to make payment for vouchers bought",
-      clientReference,
-      callbackUrl: "https://webhook.site/4a5f8870-239c-44d7-8991-93ce078525a1",
-      cancellationUrl:
-        "https://webhook.site/4a5f8870-239c-44d7-8991-93ce078525a1",
-      returnUrl: "https://webhook.site/4a5f8870-239c-44d7-8991-93ce078525a1",
-      // logo: "http://example.com",
-    },
-  });
-
-  const data = await resp.data;
-  console.log(data);
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 module.exports = {

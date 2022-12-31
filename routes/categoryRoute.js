@@ -17,7 +17,6 @@ router.post(
   "/",
   asyncHandler(async (req, res) => {
     const newCategory = req.body;
-    console.log(newCategory);
     const category = await Category.create(newCategory);
     res.sendStatus(201);
   })

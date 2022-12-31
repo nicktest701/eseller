@@ -11,7 +11,7 @@ client.setCredentials({
   refresh_token: process.env.MAIL_REFRESH_TOKEN,
 });
 
-const sendMail = async (transaction_id) => {
+const sendMail = async (transaction_id, email_address) => {
   try {
     const ACCESS_TOKEN = await client.getAccessToken();
 
@@ -32,9 +32,9 @@ const sendMail = async (transaction_id) => {
 
     const mailOptions = {
       from: "aamustedresults@gmail.com",
-      to: ["nicktest701@gmail.com"],
+      to: [email_address],
       subject: "FrebbyTech Consults",
-      text: "Frebbytech Consults",
+      text: "Application Vouchers",
       html: "<h1>Thank you for your business!!!.</h1>",
       attachments: [
         {
@@ -47,7 +47,7 @@ const sendMail = async (transaction_id) => {
     const mailResult = await transportMail.sendMail(mailOptions);
     return mailResult;
   } catch (error) {
-    console.log(error.message);
+    // console.log(error.message);
     throw error.message;
   }
 };
