@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -23,3 +24,16 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+=======
+/node_modules
+.env
+.env.local
+.env.example
+.env.development
+
+# production
+/build
+momo-app
+*/momo-app
+./momo-app
+>>>>>>> b57993b30cc87dfc6484b2f3c128a683c6a742ae
